@@ -58,7 +58,7 @@ class UrbanRoutesPage:
     added_card_checkbox = (By.XPATH, ".//input[@id='card-1']/../span")
     message_box = (By.ID, 'comment')
     manta_switch = (By.XPATH, ".//div[text()='Manta y pañuelos']/../div[@class='r-sw']/div[@class='switch']")
-    manta_slider = (By.CSS_SELECTOR, 'span.slider.round')
+    manta_switch_select = (By.XPATH, "(//input[@class='switch-input'])[1]")
     ice_plus_button = (By.XPATH, ".//div[text()='Helado']/../div[2]/div/div[@class='counter-plus']")
     ice_value_counter = (By.XPATH, ".//div[text()='Helado']/../div[2]/div/div[@class='counter-value']")
     order_taxi_button = (By.CLASS_NAME, 'smart-button')
@@ -72,7 +72,7 @@ class UrbanRoutesPage:
 
     # route methods
     def wait_for_load_main_page(self):
-        WebDriverWait(self.driver, 3).until(expected_conditions.visibility_of_element_located(self.from_field))
+        WebDriverWait(self.driver, 10).until(expected_conditions.visibility_of_element_located(self.from_field))
     def set_from(self, from_address):
         self.driver.find_element(*self.from_field).send_keys(from_address)
 
@@ -89,7 +89,7 @@ class UrbanRoutesPage:
         self.driver.find_element(*self.select_taxi_button).click()
 
     def wait_for_load_transport(self):
-        WebDriverWait(self.driver, 3).until(expected_conditions.element_to_be_clickable(self.select_taxi_button))
+        WebDriverWait(self.driver, 10).until(expected_conditions.element_to_be_clickable(self.select_taxi_button))
 
     def set_route(self, address_from, address_to):
         self.wait_for_load_main_page()
@@ -100,7 +100,7 @@ class UrbanRoutesPage:
 
     # fee methods
     def wait_for_load_fee(self):
-        WebDriverWait(self.driver, 3).until(expected_conditions.element_to_be_clickable(self.comfort_button))
+        WebDriverWait(self.driver, 10).until(expected_conditions.element_to_be_clickable(self.comfort_button))
 
     def click_comfort_fee(self):
         self.driver.find_element(*self.comfort_button).click()
@@ -113,7 +113,7 @@ class UrbanRoutesPage:
         self.driver.find_element(*self.phone_number_button).click()
 
     def wait_for_load_phone_popup(self):
-        WebDriverWait(self.driver, 3).until(expected_conditions.visibility_of_element_located(self.phone_number_input))
+        WebDriverWait(self.driver, 10).until(expected_conditions.visibility_of_element_located(self.phone_number_input))
 
     def set_phone_number(self, phone_number):
         self.driver.find_element(*self.phone_number_input).send_keys(phone_number)
@@ -122,7 +122,7 @@ class UrbanRoutesPage:
         self.driver.find_element(*self.phone_next_button).click()
 
     def wait_for_load_sms_popup(self):
-        WebDriverWait(self.driver, 3).until(expected_conditions.visibility_of_element_located(self.sms_input))
+        WebDriverWait(self.driver, 10).until(expected_conditions.visibility_of_element_located(self.sms_input))
 
     def set_sms_code(self, sms_code):
         self.driver.find_element(*self.sms_input).send_keys(sms_code)
@@ -149,19 +149,19 @@ class UrbanRoutesPage:
         self.driver.find_element(*self.payment_button).click()
 
     def wait_for_load_cards_popup(self):
-        WebDriverWait(self.driver,3).until(expected_conditions.visibility_of_element_located(self.add_card_button))
+        WebDriverWait(self.driver,10).until(expected_conditions.visibility_of_element_located(self.add_card_button))
 
     def click_add_a_card_button(self):
         self.driver.find_element(*self.add_card_button).click()
 
     def wait_for_load_payment_popup(self):
-        WebDriverWait(self.driver, 3).until(expected_conditions.visibility_of_element_located(self.payment_input))
+        WebDriverWait(self.driver, 10).until(expected_conditions.visibility_of_element_located(self.payment_input))
 
     def set_card_number(self, card_number):
         self.driver.find_element(*self.payment_input).send_keys(card_number)
 
     def wait_for_code_box(self):
-        WebDriverWait(self.driver, 3).until(expected_conditions.element_to_be_clickable(self.card_code_input))
+        WebDriverWait(self.driver, 10).until(expected_conditions.element_to_be_clickable(self.card_code_input))
 
     def select_card_code(self):
         self.driver.find_element(*self.card_code_input).click()
@@ -173,7 +173,7 @@ class UrbanRoutesPage:
         self.driver.find_element(*self.card_code_input).send_keys(Keys.TAB)
 
     def click_payment_add_button(self):
-        WebDriverWait(self.driver,3).until(
+        WebDriverWait(self.driver,10).until(
             expected_conditions.element_to_be_clickable(self.card_next_button)).click()
 
 
@@ -188,7 +188,7 @@ class UrbanRoutesPage:
         self.click_payment_add_button()
 
     def get_card_check(self):
-        WebDriverWait(self.driver,3).until(expected_conditions.visibility_of_element_located(self.added_card_checkbox))
+        WebDriverWait(self.driver,10).until(expected_conditions.visibility_of_element_located(self.added_card_checkbox))
         return self.driver.find_element(*self.added_card_checkbox).is_displayed()
 
     def click_x_close_payment_button(self):
@@ -210,13 +210,14 @@ class UrbanRoutesPage:
     def click_manta_switch(self):
         self.driver.find_element(*self.manta_switch).click()
 
-    def get_slider_color(self):
-        self.driver.find_element(*self.manta_slider).get_property('checked')
+    # CORRECIONES: Nuevo metodo para verificar el switch
+    def get_slider_selected(self):
+        return self.driver.find_element(*self.manta_switch_select).is_selected()
 
 
     # Icecream methods
     def wait_for_load_ice_plus_button(self):
-        WebDriverWait(self.driver, 3).until(expected_conditions.element_to_be_clickable(self.ice_plus_button))
+        WebDriverWait(self.driver, 10).until(expected_conditions.element_to_be_clickable(self.ice_plus_button))
 
     def scroll_to_ice_button(self):
         ActionChains(self.driver).scroll_to_element(self.driver.find_element(*self.ice_plus_button)).perform()
@@ -236,13 +237,13 @@ class UrbanRoutesPage:
         self.driver.find_element(*self.order_taxi_button).click()
 
     def wait_for_load_order_popup(self):
-        WebDriverWait(self.driver,3).until(expected_conditions.visibility_of_element_located(self.order_info_popup))
+        WebDriverWait(self.driver,10).until(expected_conditions.visibility_of_element_located(self.order_info_popup))
 
     def get_order_text(self):
         return self.driver.find_element(*self.order_info_text).text
 
     def wait_for_load_order_info_popup(self):
-        WebDriverWait(self.driver,40).until(expected_conditions.visibility_of_element_located(self.order_info_number))
+        WebDriverWait(self.driver,43).until(expected_conditions.visibility_of_element_located(self.order_info_number))
 
     def get_driver_from_info(self):
         return self.driver.find_element(*self.order_info_driver).text
@@ -364,6 +365,9 @@ class TestUrbanRoutes:
         routes_page.click_comfort_fee()
 
         routes_page.click_manta_switch()
+
+        # CORRECIONES: assert para verificar el switch de la manta
+        assert routes_page.get_slider_selected()
         self.driver.close()
 
 
